@@ -2,12 +2,15 @@
   <div>
     <div style="padding: 10px">
       <el-button>新增</el-button>
-      <el-button>修改</el-button>
-      <el-button>删除</el-button>
+      <el-button>导入</el-button>
+      <el-button>导出</el-button>
     </div>
     <div style="margin: 10px 0">
       <el-input v-model="search" style="width: 20%"></el-input>
       <el-button style="margin-left: 5px" @click="queryData">查询</el-button>
+      <el-button style="margin-left: 5px" @click="queryData2"
+        >查询所有
+      </el-button>
     </div>
     <div style="padding: 10px">
       <el-table :data="tableData" height="250" style="width: 1000px">
@@ -19,10 +22,10 @@
         <el-table-column label="压缩" prop="zip" />
         <el-table-column fixed="right" label="Operations" width="120">
           <template #default>
-            <el-button link size="small" type="primary" @click="handleClick"
-              >Detail
+            <el-button link size="small" type="primary" @click="openDialog"
+              >编辑
             </el-button>
-            <el-button link size="small" type="primary">Edit</el-button>
+            <el-button link size="small" type="primary">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -48,6 +51,7 @@
 // @ is an alias to /src
 // import HelloWorld from "@/components/HelloWorld.vue";
 import axiosRequest from "@/utils/axiosRequest";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 export default {
   name: "HomeView",
@@ -60,6 +64,7 @@ export default {
       testForm: {},
       currentPage4: 4,
       pageSize4: 4,
+      pageNum: 1,
       small: false,
       background: false,
       disabled: false,
@@ -79,13 +84,45 @@ export default {
   methods: {
     handleSizeChange() {},
     handleCurrentChange() {},
-    handleClick() {},
     queryData() {
       console.log("我是请求");
-      axiosRequest.post("/user", "1").then((res) => {
+      axiosRequest
+        .get("/user", {
+          // console.log("我是请求2");
+          pageNum: this.pageNum,
+          pageSize: this.pageSize4,
+        })
+        .then((res) => {
+          console.log(res);
+        });
+    },
+    queryData2() {
+      console.log("我是请求2");
+      axiosRequest.get("/user").then((res) => {
         // console.log("我是请求2");
         console.log(res);
       });
+    },
+    openDialog() {
+      ElMessageBox.prompt("Please input your e-mail", "编辑数据", {
+        confirmButtonText: "提交",
+        cancelButtonText: "取消",
+        inputPattern:
+          /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+        inputErrorMessage: "Invalid Email",
+      })
+        .then(({ value }) => {
+          ElMessage({
+            type: "success",
+            message: `Your email is:${value}`,
+          });
+        })
+        .catch(() => {
+          ElMessage({
+            type: "info",
+            message: "Input canceled",
+          });
+        });
     },
   },
 };

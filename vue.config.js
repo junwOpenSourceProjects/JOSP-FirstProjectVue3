@@ -11,7 +11,7 @@ module.exports = {
         changeOrigin: true, //是否设置同源，输入是的
         pathRewrite: {
           //路径重写
-          "^": "", //选择忽略拦截器里面的单词
+          "": "", //选择忽略拦截器里面的单词
         },
       },
     },
