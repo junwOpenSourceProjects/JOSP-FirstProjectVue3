@@ -1,18 +1,22 @@
 <template>
-  <nav>home</nav>
   <div>
     <demo-header></demo-header>
+    <div style="display: flex">
+      <demo-aside />
+      <router-view />
+    </div>
   </div>
-  <router-view />
 </template>
 
 <style></style>
 <script>
 import demoHeader from "@/components/demoHeader.vue";
+import DemoAside from "@/components/demoAside.vue";
 
 export default {
   name: "layout-demo",
   components: {
+    DemoAside,
     demoHeader,
   },
 };
