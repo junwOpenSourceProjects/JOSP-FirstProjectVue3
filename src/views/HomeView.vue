@@ -7,7 +7,7 @@
     </div>
     <div style="margin: 10px 0">
       <el-input v-model="search" style="width: 20%"></el-input>
-      <el-button style="margin-left: 5px">查询</el-button>
+      <el-button style="margin-left: 5px" @click="queryData">查询</el-button>
     </div>
     <div style="padding: 10px">
       <el-table :data="tableData" height="250" style="width: 1000px">
@@ -47,6 +47,8 @@
 <script>
 // @ is an alias to /src
 // import HelloWorld from "@/components/HelloWorld.vue";
+import axiosRequest from "@/utils/axiosRequest";
+
 export default {
   name: "HomeView",
   components: {
@@ -55,6 +57,7 @@ export default {
   data() {
     return {
       search: "",
+      testForm: {},
       currentPage4: 4,
       pageSize4: 4,
       small: false,
@@ -76,6 +79,14 @@ export default {
   methods: {
     handleSizeChange() {},
     handleCurrentChange() {},
+    handleClick() {},
+    queryData() {
+      console.log("我是请求");
+      axiosRequest.post("/user", "1").then((res) => {
+        // console.log("我是请求2");
+        console.log(res);
+      });
+    },
   },
 };
 </script>
