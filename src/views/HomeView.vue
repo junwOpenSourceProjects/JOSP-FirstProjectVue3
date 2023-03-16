@@ -8,36 +8,55 @@
     <div style="margin: 10px 0">
       <el-input v-model="search" style="width: 20%"></el-input>
       <el-button style="margin-left: 5px" @click="queryData">查询</el-button>
-      <el-button style="margin-left: 5px" @click="queryData2"
-        >查询所有
-      </el-button>
+      <!--<el-button style="margin-left: 5px" @click="queryData2"-->
+      <!--  >查询所有-->
+      <!--</el-button>-->
     </div>
     <div style="padding: 10px">
-      <el-table :data="tableData" height="250" style="width: 1000px">
-        <el-table-column fixed label="Date" prop="date" />
-        <el-table-column label="姓名" prop="name" />
-        <el-table-column label="状态" prop="state" />
-        <el-table-column label="城市" prop="city" />
-        <el-table-column label="地址" prop="address" />
-        <el-table-column label="压缩" prop="zip" />
+      <el-table :data="tableData" style="width: 1500px; min-height: 100vh">
+        <el-table-column fixed label="排名" prop="rank" sortable />
+        <el-table-column label="姓名" prop="studentName" sortable />
+        <el-table-column label="政治" prop="scorePolite" sortable />
+        <el-table-column label="英语" prop="scoreEnglish" sortable />
+        <el-table-column label="专业课一" prop="scoreProfessional1" sortable />
+        <el-table-column label="专业课二" prop="scoreProfessional2" sortable />
+        <el-table-column label="总分" prop="scoreTotal" sortable />
+        <el-table-column label="公共课总分" prop="scoreTotalPublic" sortable />
+        <el-table-column
+          label="专业课总分"
+          prop="scoreTotalProfessional"
+          sortable
+        />
+        <el-table-column label="红果研排名" prop="hgyRank" sortable />
+        <el-table-column label="考研盒子排名" prop="kyBoxRank" sortable />
         <el-table-column fixed="right" label="Operations" width="120">
-          <template #default>
-            <el-button link size="small" type="primary" @click="openDialog"
+          <template #default="scope">
+            <el-button
+              link
+              size="small"
+              type="primary"
+              @click="openDialog(scope.row)"
               >编辑
             </el-button>
-            <el-button link size="small" type="primary">删除</el-button>
+            <el-button
+              link
+              size="small"
+              type="primary"
+              @click="deleteLine(scope.row.id)"
+              >删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
       <div style="margin: 10px">
         <el-pagination
           v-model:current-page="currentPage4"
-          v-model:page-size="pageSize4"
+          v-model:page-size="pageNum"
           :background="background"
           :disabled="disabled"
-          :page-sizes="[100, 200, 300, 400]"
+          :page-sizes="pageSize4"
           :small="small"
-          :total="400"
+          :total="pageTotal"
           layout="total, sizes, prev, pager, next, jumper"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -62,12 +81,14 @@ export default {
     return {
       search: "",
       testForm: {},
-      currentPage4: 4,
-      pageSize4: 4,
       pageNum: 1,
+      currentPage4: 4,
+      pageTotal: 4,
+      pageSize4: [100, 200, 300, 400],
       small: false,
       background: false,
       disabled: false,
+      dialogData: null,
       tableData: [
         {
           date: "2016-05-03",
@@ -81,29 +102,71 @@ export default {
       ],
     };
   },
+  created() {
+    this.queryData();
+  },
   methods: {
-    handleSizeChange() {},
-    handleCurrentChange() {},
+    handleSizeChange(pageSize) {
+      this.pageSize4 = pageSize;
+      this.queryData(); //刷新数据
+    },
+    handleCurrentChange(pageNum) {
+      this.currentPage4 = pageNum;
+      this.queryData(); //刷新数据
+    },
     queryData() {
       console.log("我是请求");
       axiosRequest
         .get("/user", {
-          // console.log("我是请求2");
-          pageNum: this.pageNum,
-          pageSize: this.pageSize4,
+          params: {
+            // console.log("我是请求2");
+            pageNum: this.pageNum,
+            pageSize: this.pageSize4,
+            search: this.search,
+          },
         })
         .then((res) => {
           console.log(res);
+          this.tableData = res.data;
         });
     },
-    queryData2() {
-      console.log("我是请求2");
-      axiosRequest.get("/user").then((res) => {
-        // console.log("我是请求2");
-        console.log(res);
+    deleteLine(id) {
+      console.log("我是id" + id);
+      axiosRequest.delete("/api/user" + id).then((res) => {
+        if (res.data.code === "0") {
+          this.$message.success(res.data.message);
+        } else {
+          this.$message.error(res.data.message);
+        }
+        this.queryData();
       });
     },
-    openDialog() {
+    openDialog(row) {
+      this.dialogData = JSON.parse(JSON.stringify(row)); // 深拷贝
+      if (this.dialogData.id) {
+        // 更新
+        axiosRequest.put("/api/user", this.dialogData).then((res) => {
+          console.log(res);
+          if (res.data.code === "0") {
+            this.$message.success(res.data.message);
+          } else {
+            this.$message.error(res.data.message);
+          }
+          this.queryData(); //更新以后刷新数据
+          // this.dia 关闭弹窗
+        });
+      } else {
+        // 新增
+        axiosRequest.post("/api/user", this.dialogData).then((res) => {
+          console.log(res);
+          if (res.data.code === "0") {
+            this.$message.success(res.data.message);
+          } else {
+            this.$message.error(res.data.message);
+          }
+        });
+      }
+
       ElMessageBox.prompt("Please input your e-mail", "编辑数据", {
         confirmButtonText: "提交",
         cancelButtonText: "取消",
