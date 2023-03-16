@@ -13,7 +13,7 @@
       <!--</el-button>-->
     </div>
     <div style="padding: 10px">
-      <el-table :data="tableData" style="width: 1500px; min-height: 100vh">
+      <el-table :data="tableData" style="width: 1500px; min-height: 70vh">
         <el-table-column fixed label="排名" prop="rank" sortable />
         <el-table-column label="姓名" prop="studentName" sortable />
         <el-table-column label="政治" prop="scorePolite" sortable />
@@ -42,7 +42,7 @@
               link
               size="small"
               type="primary"
-              @click="deleteLine(scope.row.id)"
+              @click="deleteLine(scope.row)"
               >删除
             </el-button>
           </template>
@@ -63,6 +63,21 @@
         />
       </div>
     </div>
+    <el-dialog
+      v-model="dialogVisible"
+      :before-close="handleClose"
+      :data="dialogData"
+      title="编辑数据"
+      width="30%"
+    >
+      <span>{{ dialogData.rank }}</span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="submitChange"> 提交 </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -70,7 +85,6 @@
 // @ is an alias to /src
 // import HelloWorld from "@/components/HelloWorld.vue";
 import axiosRequest from "@/utils/axiosRequest";
-import { ElMessage, ElMessageBox } from "element-plus";
 
 export default {
   name: "HomeView",
@@ -79,6 +93,7 @@ export default {
   },
   data() {
     return {
+      dialogVisible: false,
       inputSearchName: "",
       testForm: {},
       pageTotal: 1, // 总页数
@@ -123,13 +138,13 @@ export default {
           this.pageTotal = res.data.total;
         });
     },
-    deleteLine(id) {
-      console.log("我是id" + id);
-      axiosRequest.delete("/api/user" + id).then((res) => {
-        if (res.data.code === "0") {
-          this.$message.success(res.data.message);
+    deleteLine(data) {
+      console.log("我是数据：" + JSON.stringify(data));
+      axiosRequest.delete("/MergeDatabase/" + data.rank).then((res) => {
+        if (res.code === "1") {
+          this.$message.error(res.data);
         } else {
-          this.$message.error(res.data.message);
+          this.$message.success(res.data);
         }
         this.queryData();
       });
@@ -142,51 +157,37 @@ export default {
       this.currentPage = pageNum;
       this.queryData(); // 刷新数据
     },
+    handleClose() {},
+    submitChange() {
+      this.dialogVisible = false;
+    },
     openDialog(row) {
+      this.dialogVisible = true;
+      console.log("我是当前行：", JSON.stringify(row));
       this.dialogData = JSON.parse(JSON.stringify(row)); // 深拷贝
-      if (this.dialogData.id) {
-        // 更新
-        axiosRequest.put("/api/user", this.dialogData).then((res) => {
-          console.log(res);
-          if (res.data.code === "0") {
-            this.$message.success(res.data.message);
-          } else {
-            this.$message.error(res.data.message);
-          }
-          this.queryData(); //更新以后刷新数据
-          // this.dia 关闭弹窗
-        });
-      } else {
-        // 新增
-        axiosRequest.post("/api/user", this.dialogData).then((res) => {
-          console.log(res);
-          if (res.data.code === "0") {
-            this.$message.success(res.data.message);
-          } else {
-            this.$message.error(res.data.message);
-          }
-        });
-      }
-
-      ElMessageBox.prompt("Please input your e-mail", "编辑数据", {
-        confirmButtonText: "提交",
-        cancelButtonText: "取消",
-        inputPattern:
-          /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-        inputErrorMessage: "Invalid Email",
-      })
-        .then(({ value }) => {
-          ElMessage({
-            type: "success",
-            message: `Your email is:${value}`,
-          });
-        })
-        .catch(() => {
-          ElMessage({
-            type: "info",
-            message: "Input canceled",
-          });
-        });
+      // if (this.dialogData.id) {
+      //   // 更新
+      //   axiosRequest.put("/api/user", this.dialogData).then((res) => {
+      //     console.log(res);
+      //     if (res.data.code === "0") {
+      //       this.$message.success(res.data.message);
+      //     } else {
+      //       this.$message.error(res.data.message);
+      //     }
+      //     this.queryData(); //更新以后刷新数据
+      //     // this.dia 关闭弹窗
+      //   });
+      // } else {
+      //   // 新增
+      //   axiosRequest.post("/api/user", this.dialogData).then((res) => {
+      //     console.log(res);
+      //     if (res.data.code === "0") {
+      //       this.$message.success(res.data.message);
+      //     } else {
+      //       this.$message.error(res.data.message);
+      //     }
+      //   });
+      // }
     },
   },
 };
