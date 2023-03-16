@@ -6,7 +6,7 @@
       <el-button>导出</el-button>
     </div>
     <div style="margin: 10px 0">
-      <el-input v-model="search" style="width: 20%"></el-input>
+      <el-input v-model="inputSearchName" style="width: 20%"></el-input>
       <el-button style="margin-left: 5px" @click="queryData">查询</el-button>
       <!--<el-button style="margin-left: 5px" @click="queryData2"-->
       <!--  >查询所有-->
@@ -50,11 +50,11 @@
       </el-table>
       <div style="margin: 10px">
         <el-pagination
-          v-model:current-page="currentPage4"
-          v-model:page-size="pageNum"
+          v-model:current-page="currentPage"
+          v-model:page-size="pageSize"
           :background="background"
           :disabled="disabled"
-          :page-sizes="pageSize4"
+          :page-sizes="[10, 30, 50, 100]"
           :small="small"
           :total="pageTotal"
           layout="total, sizes, prev, pager, next, jumper"
@@ -79,12 +79,13 @@ export default {
   },
   data() {
     return {
-      search: "",
+      inputSearchName: "",
       testForm: {},
-      pageNum: 1,
-      currentPage4: 4,
-      pageTotal: 4,
-      pageSize4: [100, 200, 300, 400],
+      pageTotal: 1, // 总页数
+      currentPage: 1, // 页码
+      pageSize: 10, // 每页记录条数
+      // orderProp: "rank", //排序字段
+      // orderAsc: true, //是否正序
       small: false,
       background: false,
       disabled: false,
@@ -106,28 +107,20 @@ export default {
     this.queryData();
   },
   methods: {
-    handleSizeChange(pageSize) {
-      this.pageSize4 = pageSize;
-      this.queryData(); //刷新数据
-    },
-    handleCurrentChange(pageNum) {
-      this.currentPage4 = pageNum;
-      this.queryData(); //刷新数据
-    },
     queryData() {
       console.log("我是请求");
       axiosRequest
-        .get("/user", {
+        .get("/MergeDatabase", {
           params: {
-            // console.log("我是请求2");
-            pageNum: this.pageNum,
-            pageSize: this.pageSize4,
-            search: this.search,
+            pageSize: this.pageSize,
+            currentPage: this.currentPage,
           },
         })
         .then((res) => {
           console.log(res);
-          this.tableData = res.data;
+          this.tableData = res.data.records;
+          this.currentPage = res.data.current;
+          this.pageTotal = res.data.total;
         });
     },
     deleteLine(id) {
@@ -140,6 +133,14 @@ export default {
         }
         this.queryData();
       });
+    },
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      this.queryData(); // 刷新数据
+    },
+    handleCurrentChange(pageNum) {
+      this.currentPage = pageNum;
+      this.queryData(); // 刷新数据
     },
     openDialog(row) {
       this.dialogData = JSON.parse(JSON.stringify(row)); // 深拷贝
