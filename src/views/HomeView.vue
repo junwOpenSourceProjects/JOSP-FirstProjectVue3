@@ -70,13 +70,35 @@
       title="编辑数据"
       width="30%"
     >
-      <span>{{ dialogData.rank }}</span>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="submitChange"> 提交 </el-button>
-        </span>
-      </template>
+      <!--双向绑定数据的方式-->
+      <!--<span>{{ dialogData.rank }}</span>-->
+      <el-form
+        ref="ruleForm"
+        :model="dialogData"
+        :rules="rules"
+        class="demo-ruleForm"
+        label-width="100px"
+        status-icon
+      >
+        <el-form-item label="姓名" prop="studentName">
+          <el-input
+            v-model="dialogData.studentName"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="排名" prop="rank">
+          <el-input v-model="dialogData.rank" autocomplete="off"></el-input>
+        </el-form-item>
+        <!--<el-form-item label="排名" prop="age">-->
+        <!--  <el-input v-model.number="dialogData.age"></el-input>-->
+        <!--</el-form-item>-->
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')"
+            >提交
+          </el-button>
+          <el-button @click="resetForm('ruleForm')">退出编辑</el-button>
+        </el-form-item>
+      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -92,7 +114,30 @@ export default {
     // HelloWorld,
   },
   data() {
+    const checkAge = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("排名不能为空"));
+      }
+      setTimeout(() => {
+        if (!Number.isInteger(value)) {
+          callback(new Error("请输入数字值"));
+        } else {
+          if (value < 0) {
+            callback(new Error("必须大于0"));
+          } else {
+            callback();
+          }
+        }
+      }, 1000);
+    };
     return {
+      ruleForm: {
+        studentName: "",
+        rank: "",
+      },
+      rules: {
+        rank: [{ validator: checkAge, trigger: "blur" }],
+      },
       dialogVisible: false,
       inputSearchName: "",
       testForm: {},
@@ -122,6 +167,21 @@ export default {
     this.queryData();
   },
   methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert("submit!");
+          // console.log("我是数据", JSON.stringify(formName));
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+      this.dialogVisible = false; // 清空后关闭表单
+    },
     queryData() {
       console.log("我是请求");
       axiosRequest
