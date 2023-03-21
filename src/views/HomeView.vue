@@ -1,3 +1,13 @@
+<!--
+ * @Author: junw 45444154+wo1261931780@users.noreply.github.com
+ * @Date: 2023-03-21 15:24:04
+ * @LastEditors: junw 45444154+wo1261931780@users.noreply.github.com
+ * @LastEditTime: 2023-03-21 22:43:16
+ * @FilePath: \JOSP-vueFirst\src\views\HomeView.vue
+ * @Description: 1111
+ *
+ * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved.
+-->
 <template>
   <div>
     <div style="padding: 10px">
