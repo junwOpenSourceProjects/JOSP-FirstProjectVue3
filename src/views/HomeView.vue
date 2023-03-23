@@ -119,7 +119,7 @@
 import axiosRequest from "@/utils/axiosRequest";
 
 export default {
-  name: "HomeView",
+  userName: "HomeView",
   components: {
     // HelloWorld,
   },

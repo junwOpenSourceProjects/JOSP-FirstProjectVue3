@@ -50,7 +50,7 @@
 
 <script>
 export default {
-  name: "demoAside",
+  userName: "demoAside",
 };
 </script>
 

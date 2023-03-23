@@ -13,7 +13,7 @@ import DemoHeader from "@/components/demoHeader.vue";
 import DemoAside from "@/components/demoAside.vue";
 
 export default {
-  name: "demoLayout",
+  userName: "demoLayout",
   components: { DemoAside, DemoHeader },
 };
 </script>

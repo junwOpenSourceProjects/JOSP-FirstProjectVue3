@@ -25,7 +25,7 @@
 // import DemoAside from "@/components/demoAside.vue";
 
 export default {
-  name: "app",
+  userName: "app",
   components: {
     // DemoAside,
     // demoHeader,
