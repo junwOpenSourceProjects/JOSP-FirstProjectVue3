@@ -33,7 +33,9 @@
                 <template #dropdown>
                   <el-dropdown-menu>
                     <el-dropdown-item>个人信息</el-dropdown-item>
-                    <el-dropdown-item>退出系统</el-dropdown-item>
+                    <el-dropdown-item @click="logout"
+                      >退出系统
+                    </el-dropdown-item>
                     <el-dropdown-item disabled>Action 4</el-dropdown-item>
                     <el-dropdown-item divided>Action 5</el-dropdown-item>
                   </el-dropdown-menu>
@@ -51,6 +53,15 @@
 <script>
 export default {
   userName: "demoHeader",
+  data() {
+    return {};
+  },
+  methods: {
+    logout() {
+      // 按理来说要清除token，但是这里没有token，所以先不写
+      this.$router.push("/login");
+    },
+  },
 };
 </script>
 

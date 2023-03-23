@@ -30,6 +30,12 @@ const routes = [
     // 这里就是自动配置的路由，设置登录页面的路由
     component: () => import("../views/demoLogin.vue"),
   },
+  {
+    path: "/register",
+    name: "register",
+    // 这里就是自动配置的路由，设置登录页面的路由
+    component: () => import("../views/demoRegister.vue"),
+  },
 ];
 
 const router = createRouter({
