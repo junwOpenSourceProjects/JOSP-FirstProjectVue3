@@ -71,6 +71,8 @@ export default {
               message: "登录成功",
               type: "success",
             });
+            // 登录成功后，将token存储到sessionStorage中
+            sessionStorage.setItem("token", JSON.stringify(res.data));
             // 登录成功后，跳转到首页
             this.$router.push("/");
           } else {

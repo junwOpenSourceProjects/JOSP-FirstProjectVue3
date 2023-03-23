@@ -1,4 +1,5 @@
 import axios from "axios";
+import router from "@/router";
 
 const request = axios.create({
   baseURL: "/api",
@@ -14,7 +15,12 @@ const request = axios.create({
 request.interceptors.request.use(
   (config) => {
     config.headers["Content-Type"] = "application/json;charset=utf-8";
-
+    // 登录拦截模块===================================
+    const userToken = localStorage.getItem("token");
+    if (!userToken) {
+      router.push("/home");
+    }
+    // 登录拦截模块===================================
     return config;
   },
   (error) => {

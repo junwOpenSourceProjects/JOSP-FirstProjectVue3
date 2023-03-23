@@ -1,10 +1,15 @@
 <template>
   <div>
     <el-menu
+      :default-active="defaultPath"
       class="el-menu-vertical-demo"
-      default-active="demoUser"
+      router
       style="min-height: calc(100vh - 50px)"
     >
+      <!--添加了router以后，就可以使用router-link来进行跳转了-->
+      <!--说人话就是，这里的index就是路由的path，而且是默认的active的响应式的-->
+      <!--default-active="demoUser"-->
+      <!--默认的active可以不加,免得鼠标响应很奇怪-->
       <el-sub-menu index="1">
         <template #title>
           <el-icon>
@@ -13,9 +18,9 @@
           <span>测试数据1</span>
         </template>
         <el-menu-item-group title="分组一">
-          <el-menu-item index="demoUser">合并数据库</el-menu-item>
+          <el-menu-item index="/home">合并数据库</el-menu-item>
           <!--这里就是设置默认的响应式的active-->
-          <el-menu-item index="1-2">项目2</el-menu-item>
+          <el-menu-item index="/showMessage">showMessage页面</el-menu-item>
         </el-menu-item-group>
         <!--目前这里全部都是硬编码的，后面可以考虑用vuex来管理-->
         <el-menu-item-group title="分组二">
@@ -51,6 +56,15 @@
 <script>
 export default {
   userName: "demoAside",
+  data() {
+    return {
+      // 设置动态的默认的active
+      defaultPath: this.$route.path,
+    };
+  },
+  created() {
+    console.log("我是路由：", this.$route.path);
+  },
 };
 </script>
 

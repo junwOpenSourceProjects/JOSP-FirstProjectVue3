@@ -25,7 +25,8 @@
             <div style="width: 100px">
               <el-dropdown>
                 <span class="el-dropdown-link">
-                  当前用户
+                  <!--当前用户-->
+                  {{ userToken }}
                   <el-icon class="el-icon--right">
                     <arrow-down />
                   </el-icon>
@@ -53,14 +54,24 @@
 <script>
 export default {
   userName: "demoHeader",
+  created() {
+    console.log("我是结果", this.$store.state.userToken);
+    // const userToken = JSON.parse(window.sessionStorage.getItem("userToken"));
+  },
   data() {
-    return {};
+    return {
+      // 获取对话中拿到的token用户信息
+      userToken: JSON.parse(window.sessionStorage.getItem("token")),
+    };
   },
   methods: {
     logout() {
       // 按理来说要清除token，但是这里没有token，所以先不写
       this.$router.push("/login");
     },
+  },
+  mounted() {
+    console.log("我是结果", this.userToken);
   },
 };
 </script>
