@@ -1,25 +1,26 @@
-# 🚀 JOSP-FirstProjectVue3 - Vue3通用管理系统前端
+# 🚀 JOSP-FirstProjectVue3 - 用户登录注册系统前端
 
-![Vue](https://img.shields.io/badge/Vue-3.3.4-4FC08D?style=flat-square&logo=vue.js)
-![Vite](https://img.shields.io/badge/Vite-4.4.9-646CFF?style=flat-square&logo=vite)
-![Element Plus](https://img.shields.io/badge/Element%20Plus-2.3.14-409EFF?style=flat-square&logo=element)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.2.2-3178C6?style=flat-square&logo=typescript)
+![Vue](https://img.shields.io/badge/Vue-3.2.13-4FC08D?style=flat-square&logo=vue.js)
+![Element Plus](https://img.shields.io/badge/Element%20Plus-2.3.0-409EFF?style=flat-square&logo=element)
+![Vuex](https://img.shields.io/badge/Vuex-4.0.0-4FC08D?style=flat-square)
 ![License](https://img.shields.io/badge/License-AGPL--3.0-blue?style=flat-square)
 
-> Vue3前端 - 通用增删改查管理系统模板
+> Vue3前端 - 用户登录注册演示系统
 
 ## 📖 项目简介
 
-JOSP-FirstProjectVue3 是一个基于Vue3的通用管理系统前端模板,提供完整的增删改查功能,支持代码生成器和多数据源配置,是快速开发后台管理系统的理想起点。
+JOSP-FirstProjectVue3 是一个基于Vue3的用户登录注册演示系统前端,提供完整的用户认证功能,包含登录、注册、表单验证等核心功能,是学习Vue3开发的理想入门项目。
 
-### ✨ 核心特性
+**后端项目**: [JOSP-FirstProjectJava](../JOSP-FirstProjectJava)
 
-- 🎯 **TypeScript支持** - 完整的类型定义
-- 🚀 **Vue3 Composition API** - 组合式API开发
-- 💾 **Pinia状态管理** - 轻量级状态管理
-- 🎨 **Element Plus** - 现代化UI组件
-- 🔐 **RBAC权限** - 基于角色的访问控制
-- 📱 **响应式设计** - 多端适配
+## ✨ 核心特性
+
+- 🎯 **用户登录** - 用户名密码登录验证
+- 📝 **用户注册** - 新用户注册功能,密码二次确认
+- 🔐 **Session管理** - 基于sessionStorage的token管理
+- 🎨 **Element Plus** - 现代化UI组件库
+- 💾 **Vuex状态管理** - 集中式状态管理
+- 🚀 **Vue Router** - 单页应用路由管理
 
 ## 🏗️ 系统架构
 
@@ -60,13 +61,104 @@ graph TB
 
 | 技术 | 版本 | 说明 |
 |------|------|------|
-| Vue | 3.3.4 | 渐进式JavaScript框架 |
-| TypeScript | 5.2.2 | JavaScript超集 |
-| Vite | 4.4.9 | 下一代构建工具 |
-| Element Plus | 2.3.14 | UI组件库 |
-| Pinia | 2.1.6 | 状态管理 |
-| Vue Router | 4.2.5 | 路由管理 |
-| Axios | 1.5.0 | HTTP客户端 |
+| Vue | 3.2.13 | 渐进式JavaScript框架 |
+| Vue CLI | 5.0.0 | Vue项目脚手架 |
+| Element Plus | 2.3.0 | Vue3 UI组件库 |
+| Vuex | 4.0.0 | Vue3状态管理 |
+| Vue Router | 4.0.3 | Vue3官方路由 |
+| Axios | 1.7.4 | HTTP客户端 |
+| Core-js | 3.8.3 | JavaScript polyfill |
+
+## 💡 核心功能模块
+
+### 1. 用户登录模块
+
+```vue
+<!-- src/views/demoLogin.vue -->
+<el-form :model="loginForm">
+  <el-form-item label="用户名：">
+    <el-input v-model="loginForm.username" />
+  </el-form-item>
+  <el-form-item label="密码：">
+    <el-input v-model="loginForm.password" show-password />
+  </el-form-item>
+  <el-button @click="userLogin">登录</el-button>
+</el-form>
+```
+
+**功能特性:**
+- 用户名密码登录
+- 密码加密传输
+- SessionStorage token存储
+- 登录成功后跳转首页
+- 错误提示信息展示
+
+### 2. 用户注册模块
+
+```vue
+<!-- src/views/demoRegister.vue -->
+<el-form :model="loginForm">
+  <el-form-item label="用户名：">
+    <el-input v-model="loginForm.username" />
+  </el-form-item>
+  <el-form-item label="密码：">
+    <el-input v-model="loginForm.password" show-password />
+  </el-form-item>
+  <el-form-item label="再次输入密码：">
+    <el-input v-model="loginForm.confirmPassword" show-password />
+  </el-form-item>
+  <el-button @click="userLogin">注册</el-button>
+</el-form>
+```
+
+**功能特性:**
+- 新用户注册
+- 二次密码确认验证
+- 注册成功自动跳转登录页
+- 复用后端登录接口实现注册
+
+### 3. Axios请求封装
+
+```javascript
+// src/utils/axiosRequest.js
+import axios from 'axios'
+
+const axiosRequest = axios.create({
+  baseURL: 'http://localhost:8088',
+  timeout: 10000
+})
+
+// 响应拦截器
+axiosRequest.interceptors.response.use(
+  response => {
+    return response.data
+  }
+)
+
+export default axiosRequest
+```
+
+## 📁 项目结构
+
+```
+JOSP-FirstProjectVue3/
+├── src/
+│   ├── views/            # 页面组件
+│   │   ├── demoLogin.vue       # 登录页面
+│   │   ├── demoRegister.vue    # 注册页面
+│   │   └── HomeView.vue        # 首页
+│   ├── router/           # 路由配置
+│   ├── store/            # Vuex状态管理
+│   ├── utils/            # 工具函数
+│   │   └── axiosRequest.js     # Axios封装
+│   ├── components/       # 公共组件
+│   ├── layout/           # 布局组件
+│   ├── assets/           # 静态资源
+│   ├── App.vue          # 根组件
+│   └── main.js          # 入口文件
+├── package.json         # 项目依赖
+└── vue.config.js        # Vue CLI配置
+```
 
 ## 🚀 快速开始
 
