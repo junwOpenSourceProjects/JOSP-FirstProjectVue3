@@ -1,7 +1,7 @@
 # 🚀 JOSP-FirstProjectVue3 - 用户登录注册系统前端
 
 ![Vue](https://img.shields.io/badge/Vue-3.2.13-4FC08D?style=flat-square&logo=vue.js)
-![Element Plus](https://img.shields.io/badge/Element%20Plus-2.3.0-409EFF?style=flat-square&logo=element)
+![Element Plus](https://img.shields.io/badge/Element%20Plus-2.11.0-409EFF?style=flat-square&logo=element)
 ![Vuex](https://img.shields.io/badge/Vuex-4.0.0-4FC08D?style=flat-square)
 ![License](https://img.shields.io/badge/License-AGPL--3.0-blue?style=flat-square)
 
@@ -63,10 +63,10 @@ graph TB
 |------|------|------|
 | Vue | 3.2.13 | 渐进式JavaScript框架 |
 | Vue CLI | 5.0.0 | Vue项目脚手架 |
-| Element Plus | 2.3.0 | Vue3 UI组件库 |
+| Element Plus | 2.11.0 | Vue3 UI组件库 |
 | Vuex | 4.0.0 | Vue3状态管理 |
 | Vue Router | 4.0.3 | Vue3官方路由 |
-| Axios | 1.7.4 | HTTP客户端 |
+| Axios | 1.13.5 | HTTP客户端 |
 | Core-js | 3.8.3 | JavaScript polyfill |
 
 ## 💡 核心功能模块
