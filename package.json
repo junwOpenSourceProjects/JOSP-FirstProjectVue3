@@ -40,10 +40,12 @@
       "postcss@<8.4.31": ">=8.4.31",
       "uuid@<14.0.0": ">=14.0.0",
       "qs": "^6.15.1",
-      "serialize-javascript": "^6.0.0",
+      "serialize-javascript": "^6.0.2",
       "uuid": "^9.0.0",
       "element-plus": "^2.15.0",
-      "postcss": "^8.5.0"
+      "postcss": "^8.5.0",
+      "follow-redirects": "^1.16.0",
+      "lodash": "^4.17.21"
     }
   },
   "eslintConfig": {
