@@ -26,7 +26,7 @@
         "eslint-plugin-vue": "^10.9.0",
         "lint-staged": "^16.4.0",
         "prettier": "^3.8.3",
-        "vite": "^8.0.14",
+        "vite": "^8.0.16",
         "@vitejs/plugin-vue": "^6.0.7"
     },
     "eslintConfig": {
