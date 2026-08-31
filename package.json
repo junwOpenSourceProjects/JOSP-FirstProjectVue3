@@ -10,7 +10,7 @@
     },
     "dependencies": {
         "JOSP-vueFirst": "file:",
-        "axios": "^1.15.2",
+        "axios": "^1.18.0",
         "core-js": "^3.49.0",
         "element-plus": "^2.13.7",
         "vue": "^3.5.33",
